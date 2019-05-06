@@ -1,0 +1,21 @@
+#20190428
+https://www.sejuku.net/blog/70775
+
+You are downloading version 2.21.0 of Git for the Mac platform. This is the most recent maintained build for this platform. It was released about 2 months ago, on 2019-02-27.
+
+#Webでリポジトリを作成する。クリックで。
+#サブフォルダを作成する。
+Create fileで作成。
+create /reference/.gitkeep　とからファイルを置くことで作る。
+
+iMacでローカルリポジトリを作成。
+$ git init
+Initialized empty Git repository in /Volumes/NaIIDA_2018aug/github/.git/
+
+#macbookproで
+directoryを作成して、cdし、次のコマンド。
+$ git init
+Initialized empty Git repository in /Users/naokoiida/github/push/.git/
+
+$ git add pushtest.txt
+
