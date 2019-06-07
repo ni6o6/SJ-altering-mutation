@@ -42,12 +42,12 @@ for infile in in1:
                                 c=F[0]
                                 si=int(F[1])-1*int(b[0])
                                 ei=int(F[2])-1*int(b[0])
-                                out1.write(str(c)+'\t'+str(si)+'\t'+str(ei)+'\t'+str(pr)+'\t'+str(F[9])+'\t+\t'+str(r)+'\n')
+                                out1.write(str(c)+'\t'+'\t'+str(si)+'\t'+str(ei)+str(F[1])+'\t'+str(F[2])+'\t'+str(pr)+'\t'+str(F[9])+'\t+\t'+str(r)+'\n')
                             else:
                                 c=F[0]
                                 si=int(F[1])-1*int(b[0])
                                 ei=int(F[2])-1*int(b[0])
-                                out1.write(str(c)+'\t'+str(si)+'\t'+str(ei)+'\t'+str(pr)+'\t'+str(F[9])+'\t+\t'+str(r)+'\n')
+                                out1.write(str(c)+'\t'+str(si)+'\t'+str(ei)+'\t'+str(F[1])+'\t'+str(F[2])+'\t'+str(pr)+'\t'+str(F[9])+'\t+\t'+str(r)+'\n')
                         elif "s" in F[13]: #strand=- 5'SS
                             a =str(F[14])
                             b = a.split(';',2)
@@ -56,12 +56,12 @@ for infile in in1:
                                 c=F[0]
                                 si=int(F[1])-1*int(b[0])
                                 ei=int(F[2])-1*int(b[0])
-                                out1.write(str(c)+'\t'+str(si)+'\t'+str(ei)+'\t'+str(pr)+'\t'+str(F[9])+'\t-\t'+str(r)+'\n')
+                                out1.write(str(c)+'\t'+str(si)+'\t'+str(ei)+'\t'+str(F[1])+'\t'+str(F[2])+'\t'+str(pr)+'\t'+str(F[9])+'\t-\t'+str(r)+'\n')
                             else:
                                 c=F[0]
                                 si=int(F[1])-1*int(b[0])
                                 ei=int(F[2])-1*int(b[0])
-                                out1.write(str(c)+'\t'+str(si)+'\t'+str(ei)+'\t'+str(pr)+'\t'+str(F[9])+'\t-\t'+str(r)+'\n')
+                                out1.write(str(c)+'\t'+str(si)+'\t'+str(ei)+'\t'+str(F[1])+'\t'+str(F[2])+'\t'+str(pr)+'\t'+str(F[9])+'\t-\t'+str(r)+'\n')
                         elif "s" in F[17]: #strand=+ 5'SS
                             a =str(F[18])
                             b = a.split(';',2)
@@ -70,12 +70,12 @@ for infile in in1:
                                 c=F[0]
                                 si=int(F[1])-1*int(b[0])
                                 ei=int(F[2])-1*int(b[0])
-                                out1.write(str(c)+'\t'+str(si)+'\t'+str(ei)+'\t'+str(pr)+'\t'+str(F[9])+'\t-\t'+str(r)+'\n')
+                                out1.write(str(c)+'\t'+str(si)+'\t'+str(ei)+'\t'+str(F[1])+'\t'+str(F[2])+'\t'+str(pr)+'\t'+str(F[9])+'\t-\t'+str(r)+'\n')
                             else:
                                 c=F[0]
                                 si=int(F[1])-1*int(b[0])
                                 ei=int(F[2])-1*int(b[0])
-                                out1.write(str(c)+'\t'+str(si)+'\t'+str(ei)+'\t'+str(pr)+'\t'+str(F[9])+'\t+\t'+str(r)+'\n')
+                                out1.write(str(c)+'\t'+str(si)+'\t'+str(ei)+'\t'+str(F[1])+'\t'+str(F[2])+'\t'+str(pr)+'\t'+str(F[9])+'\t+\t'+str(r)+'\n')
                         elif "e" in F[17]: #strand=- 3'SS
                             a =str(F[18])
                             b = a.split(';',2)
@@ -84,11 +84,11 @@ for infile in in1:
                                 c=F[0]
                                 si=int(F[1])-1*int(b[0])
                                 ei=int(F[2])-1*int(b[0])
-                                out1.write(str(c)+'\t'+str(si)+'\t'+str(ei)+'\t'+str(pr)+'\t'+str(F[9])+'\t-\t'+str(r)+'\n')
+                                out1.write(str(c)+'\t'+str(si)+'\t'+str(ei)+'\t'+str(F[1])+'\t'+str(F[2])+'\t'+str(pr)+'\t'+str(F[9])+'\t-\t'+str(r)+'\n')
                             else:
                                 c=F[0]
                                 si=int(F[1])-1*int(b[0])
                                 ei=int(F[2])-1*int(b[0])
-                                out1.write(str(c)+'\t'+str(si)+'\t'+str(ei)+'\t'+str(pr)+'\t'+str(F[9])+'\t-\t'+str(r)+'\n')
+                                out1.write(str(c)+'\t'+str(si)+'\t'+str(ei)+'\t'+str(F[1])+'\t'+str(F[2])+'\t'+str(pr)+'\t'+str(F[9])+'\t-\t'+str(r)+'\n')
 
 

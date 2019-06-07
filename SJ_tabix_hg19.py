@@ -14,27 +14,24 @@ import re
 tbx = pysam.TabixFile("./reference/whole_genome_filtered_spliceai_scores.vcf.gz")
 
 in1=glob.glob("./alterativeSJ_freq/*.SJ.filtered.annot.ass.adj.freq.txt")
-#fo='./alterativeSJ_frequency/'
-#infile="A427.SJ.filtered.annot.ass.adj.freq.txt"
+
 for infile in in1:
-    print(infile)
     basename = os.path.basename(infile)
-    print(basename)
     pr=basename.split('.', 8)[0]
     print(pr)
     outfile='./alterativeSJ_tabixAI/%s.SJ.fil.annot.ass.adj.freq.AI.txt' %(pr)
 
     with open(infile, 'r') as in2:
         with open(outfile, 'w') as out1:
-            he = 'chr\tstart\tend\tsample\tclass\tstrand\treads\treads\ttotal\tfreq\tCHR\tPOS\tID\tREF\tMUT\tSCORE1\tSCORE2\tSYMBOL\tSTRAND\tTYPE\tDIST\tDS_AG\tDS_AL\tDS_DG\tDS_DL\tDP_AG\tDP_AL\tDP_DG\tDP_DL\tSAVnet_SpliceAI\n' #keep two "reads" because the multiple rows of same SSs are present.
-            out1.write(he)
+            #he = 'chr\tstart\tend\tstart_ori\tend_ori\tsample\tclass\tstrand\treads\ttotal\tfreq\tCHR\tPOS\tID\tREF\tMUT\tSCORE1\tSCORE2\tSYMBOL\tSTRAND\tTYPE\tDIST\tDS_AG\tDS_AL\tDS_DG\tDS_DL\tDP_AG\tDP_AL\tDP_DG\tDP_DL\tSAVnet_SpliceAI\n' #keep two "reads" because the multiple rows of same SSs are present.
+            #out1.write(he)
 
             for line in in2:
                 F = line.rstrip('\n').split('\t')
                 ln = line.rstrip('\n')
                 
                 if F[0] in ["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","X","Y"]:
-                    if "3" in F[4] and "+" in F[5]:
+                    if "3" in F[6] and "+" in F[7]:
                         c=F[0]
                         s=int(F[2])-5
                         e=int(F[2])+5
@@ -47,10 +44,10 @@ for infile in in1:
                             cl = G[4] #class
                             ints = int(G[1]) #SAVnet intron start
                             inte = int(G[2])
-                            aip = int(G[11]) #Splice AI postion
-                            inf = G[17]
+                            aip = int(G[12]) #Splice AI postion
+                            inf = G[18]
                             inf2 = re.split('[=;]', inf)
-                            strand = G[5]
+                            strand = G[7]
                             ag = int(inf2[17])
                             dg = int(inf2[21])
                             del G[-1]
@@ -62,7 +59,7 @@ for infile in in1:
                                 out1.write(line+'\t'+line2+'\tc'+str(num)+'\n')
                             else:
                                 out1.write(line+'\t'+line2+'\t-\n')
-                    elif "3" in F[4] and "-" in F[5]:
+                    elif "3" in F[6] and "-" in F[7]:
                         c=F[0]
                         s=int(F[1])-5
                         e=int(F[1])+5
@@ -75,10 +72,10 @@ for infile in in1:
                             cl = G[4] #class
                             ints = int(G[1]) #SAVnet intron start
                             inte = int(G[2])
-                            aip = int(G[11]) #Splice AI postion
-                            inf = G[17]
+                            aip = int(G[12]) #Splice AI postion
+                            inf = G[18]
                             inf2 = re.split('[=;]', inf)
-                            strand = G[5]
+                            strand = G[7]
                             ag = int(inf2[17])
                             dg = int(inf2[21])
                             del G[-1]
@@ -90,7 +87,7 @@ for infile in in1:
                                 out1.write(line+'\t'+line2+'\tc'+str(num)+'\n')
                             else:
                                 out1.write(line+'\t'+line2+'\t-\n')
-                    elif "5" in F[4] and "-" in F[5]:
+                    elif "5" in F[6] and "-" in F[7]:
                         c=F[0]
                         s=int(F[2])-5
                         e=int(F[2])+5
@@ -103,10 +100,10 @@ for infile in in1:
                             cl = G[4] #class
                             ints = int(G[1]) #SAVnet intron start
                             inte = int(G[2])
-                            aip = int(G[11]) #Splice AI postion
-                            inf = G[17]
+                            aip = int(G[12]) #Splice AI postion
+                            inf = G[18]
                             inf2 = re.split('[=;]', inf)
-                            strand = G[5]
+                            strand = G[7]
                             ag = int(inf2[17])
                             dg = int(inf2[21])
                             del G[-1]
@@ -118,7 +115,7 @@ for infile in in1:
                                 out1.write(line+'\t'+line2+'\tc'+str(num)+'\n')
                             else:
                                 out1.write(line+'\t'+line2+'\t-\n')
-                    elif "5" in F[4] and "+" in F[5]:
+                    elif "5" in F[6] and "+" in F[7]:
                         c=F[0]
                         s=int(F[1])-5
                         e=int(F[1])+5
@@ -131,8 +128,8 @@ for infile in in1:
                             cl = G[4] #class
                             ints = int(G[1]) #SAVnet intron start
                             inte = int(G[2])
-                            aip = int(G[11]) #Splice AI postion
-                            inf = G[17]
+                            aip = int(G[12]) #Splice AI postion
+                            inf = G[18]
                             inf2 = re.split('[=;]', inf)
                             strand = G[5]
                             ag = int(inf2[17])

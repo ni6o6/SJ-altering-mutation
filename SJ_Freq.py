@@ -1,33 +1,68 @@
-""""""
-#SJ_20190501_Freq.py
-""""""
+#! /usr/bin/env python
+
 import numpy as np
 import pandas as pd
 import glob
 import os
+import time
 
 fo1='./alterativeSJ_adjustment/'
 fo2='./alterativeSJ_freq/'
+fo3='./junction/'
 
-in1=glob.glob(fo1+"*.SJ.filtered.annot.ass.adj.intersect.bed")
+in1=glob.glob(fo1+"*.SJ.filtered.annot.ass.adj.bed")
+#in1=glob.glob(fo1+"DRR016718_RERF-LC-OK.SJ.filtered.annot.ass.adj.bed")
 
 for infile1 in in1:
+    start = time.time()
     basename = os.path.basename(infile1)
-    pr=basename.split('.', 8)[0]
+    pr=basename.split('.', 7)[0]
     print(pr)
-
-    df1 = pd.read_csv(infile1,sep='\t',header=None, index_col=None,names=('A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q') )
-
-    ta1=df1.groupby(["A","B","C"]).agg({'G': np.max, 'N': np.sum}).reset_index()
-    ratio=ta1["G"]/ta1["N"]
-    ta2 = pd.concat([ta1,ratio], axis=1, join='inner')
-
-    #out1='A427.SJ.filtered.annot.ass.adj.freq.txt'
-    infile2 ='%s.SJ.filtered.annot.ass.adj.bed' %(pr)
-    df2 = pd.read_csv(fo1+infile2,sep='\t',header=None, index_col=None,names=('A','B','C','D','E','F','G'))
-
-    rec1=pd.merge(df2, ta2, on=['A', 'B', 'C'])
-    col = ["chr","start","end","sample","class","strand","reads","reads","total","freq"] #keep two "reads" because the multiple rows of same SSs are present.
-    rec1.columns = col
-    out1='%s.SJ.filtered.annot.ass.adj.freq.txt' %(pr)
-    rec1.to_csv(fo2+out1, index=False, sep='\t')
+    outfile='./alterativeSJ_freq/%s.SJ.filtered.annot.ass.adj.freq.txt' %(pr)
+    jfile= fo3 + '%s.SJ.out.tab' %(pr)
+    jf = pd.read_csv(jfile, sep='\t', header=None, index_col=None,names=('CHR','START','END','A','B','C','reads','D','E'),
+                 dtype = {'CHR':'object', 'START':'object', 'END':'object','A':'object','B':'object','C':'object','reads':'int','D':'object','E':'object'})
+    with open(infile1, 'r') as df1:
+        with open(outfile, 'w') as out1:
+            for line in df1:
+                F = line.rstrip('\n').split('\t')
+                ln = line.rstrip('\n')
+                if '5' in F[6] and '+' in F[7]:
+                    c = (F[0],)
+                    cl = list(c)
+                    p = (F[4], F[2])
+                    pl = list(p)
+                    rec = jf[(jf['CHR'].isin(cl) ) & (jf['END'].isin(pl))]  
+                    #total = rec.groupby('END').sum()['reads'] <--XX
+                    total = int(rec.sum()['reads'])
+                    freq = round(int(F[8])/total, 3)
+                    out1.write(ln+'\t'+str(total)+'\t'+str(freq)+'\n')
+                elif '5' in F[6] and '-' in F[7]:
+                    c = (F[0],)
+                    cl = list(c)
+                    p = (F[3], F[1])
+                    pl = list(p)
+                    rec = jf[(jf['CHR'].isin(cl) ) & (jf['START'].isin(pl))]  
+                    total = int(rec.sum()['reads'])
+                    freq = round(int(F[8])/total, 3)
+                    out1.write(ln+'\t'+str(total)+'\t'+str(freq)+'\n')
+                elif '3' in F[6] and '+' in F[7]:
+                    c = (F[0],)
+                    cl = list(c)
+                    p = (F[3], F[1])
+                    pl = list(p)
+                    rec = jf[(jf['CHR'].isin(cl) ) & (jf['START'].isin(pl))]  
+                    total = int(rec.sum()['reads'])
+                    freq = round(int(F[8])/total, 3)
+                    out1.write(ln+'\t'+str(total)+'\t'+str(freq)+'\n')
+                elif '3' in F[6] and '-' in F[7]:
+                    c = (F[0],)
+                    cl = list(c)
+                    p = (F[4], F[2])
+                    pl = list(p)
+                    rec = jf[(jf['CHR'].isin(cl) ) & (jf['END'].isin(pl))]  
+                    total = int(rec.sum()['reads'])
+                    freq = round(int(F[8])/total, 3)
+                    out1.write(ln+'\t'+str(total)+'\t'+str(freq)+'\n')
+    end = time.time()
+    print(round(end-start,2))
