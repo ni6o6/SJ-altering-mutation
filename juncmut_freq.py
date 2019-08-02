@@ -12,7 +12,7 @@ import pandas as pd
 import argparse
 import time
 
-start = time.time()
+tstart = time.time()
 
 
 parser = argparse.ArgumentParser() #make a parser
@@ -33,21 +33,21 @@ args = parser.parse_args()
 
 pr = args.input
 print(pr) 
-
+#pr= 'RERF-LC-OK'
+#folder='lung'
 file3='./alterativeSJ_assadjfreq/%s/%s.SJ.fil.annot.assadj.txt' %(args.folder,pr)
 jfile= './junction/%s/%s.SJ.out.tab' %(args.folder,pr)
 file4 ='./alterativeSJ_assadjfreq/%s/%s.SJ.fil.annot.assadjunifreq.txt' %(args.folder,pr) 
 file44 ='./alterativeSJ_assadjfreq/%s/%s.SJ.fil.annot.assadjunifreqT.txt' %(args.folder,pr) 
 
   
-data = pd.read_csv(file3, sep='\t', header=None)
+data = pd.read_csv(file3, sep='\t', header=None,  dtype={1:'int',2:'int',3:'int',4:'int'})
 data.columns = ['chr','s','e','s_ori','e_ori', 'sample', 'class','strand', 'reads']
 data['junc'] = data[['chr','s','e']].apply(lambda x: '{}:{}:{}'.format(x[0],x[1],x[2]), axis=1)
 group_junc = data.groupby(['junc'])
 agg_junc = group_junc.agg({"chr": "max", "s": "unique", "e": "unique", "s_ori": "unique","e_ori": "unique", 'sample':'unique', 'class':'unique', 'strand':'unique', 'reads':'sum'}) #"reads": "max", 
-list_junc = agg_junc.sort_values(by=["junc"], ascending=False)
- 
-                        
+list_junc = agg_junc.sort_values(by=["junc"], ascending=False) #data.frame
+                     
 with open(jfile) as d1:
     data1 = pd.read_csv(d1, delimiter='\t',usecols=[0,1,2,6], header=None, dtype={0:'object'}) 
         #header1 = next(reader1) #skip header
@@ -69,56 +69,56 @@ with open(file4, 'w') as out1:
         s_ori = set(row[4])
         start= s | s_ori
         start_l = list(start)
-        start_l.sort
+        start_ls = sorted(start_l)
         
         e = set(row[3])
         e_ori = set(row[5])
         end= e | e_ori
         end_l = list(end)
-        end_l.sort   
+        end_ls = sorted(end_l)   
         
         total = 0
             #strand=+ 5'SS end-side
         if "5" in str(row[7]) and "+" in str(row[8]):  
-            for i in range(0,len(start_l)):
+            for i in range(0,len(end_ls)):
                 
-                position = c + ":" + str(end_l[i])
+                position = c + ":" + str(end_ls[i])
                 v=e_dict.get(position, '0')
                 total = total + int(v) 
             freq = int(row[9])/total
-            rec = c + "\t" + str(''.join(map(str, s))) + "\t" + str(''.join(map(str, e))) + "\t"  + str(','.join(map(str, start_l))) + "\t" +  str(','.join(map(str, end_l)))  + "\t" + \
+            rec = c + "\t" + str(''.join(map(str, s))) + "\t" + str(''.join(map(str, e))) + "\t"  + str(','.join(map(str, start_ls))) + "\t" +  str(','.join(map(str, end_ls)))  + "\t" + \
             str(''.join(map(str, row[6]))) + "\t" +  str(''.join(map(str, row[7]))) + "\t" + str(''.join(map(str, row[8]))) + "\t" + str(row[9]) + "\t" + str(total)+ "\t" + str(freq) + '\n' #depth
             out1.write(rec)
            #strand=- 3'SS end-side                                   
         elif "3" in str(row[7]) and "-" in str(row[8]):
-            for i in range(0,len(start_l)):
-                position = c + ":" + str(end_l[i])
+            for i in range(0,len(end_ls)):
+                position = c + ":" + str(end_ls[i])
                 v=e_dict.get(position, '0')
                 total = total + int(v) 
             freq = int(row[9])/total
-            rec = c + "\t" + str(''.join(map(str, s))) + "\t" + str(''.join(map(str, e))) + "\t"  + str(','.join(map(str, start_l))) + "\t" +  str(','.join(map(str, end_l)))  + "\t" + \
+            rec = c + "\t" + str(''.join(map(str, s))) + "\t" + str(''.join(map(str, e))) + "\t"  + str(','.join(map(str, start_ls))) + "\t" +  str(','.join(map(str, end_ls)))  + "\t" + \
             str(''.join(map(str, row[6]))) + "\t" +  str(''.join(map(str, row[7]))) + "\t" + str(''.join(map(str, row[8]))) + "\t" + str(row[9]) + "\t" + str(total)+ "\t" + str(freq) + '\n' #depth
             out1.write(rec)                
             
             #strand=- 5'SS start-side         
         elif "5" in str(row[7]) and "-" in str(row[8]):
-            for i in range(0,len(start_l)):
-                position = c + ":" + str(start_l[i])
+            for i in range(0,len(start_ls)):
+                position = c + ":" + str(start_ls[i])
                 v=s_dict.get(position, '0')
                 total = total + int(v) 
             freq = int(row[9])/total
-            rec = c + "\t" + str(''.join(map(str, s))) + "\t" + str(''.join(map(str, e))) + "\t"  + str(','.join(map(str, start_l))) + "\t" +  str(','.join(map(str, end_l)))  + "\t" + \
+            rec = c + "\t" + str(''.join(map(str, s))) + "\t" + str(''.join(map(str, e))) + "\t"  + str(','.join(map(str, start_ls))) + "\t" +  str(','.join(map(str, end_ls)))  + "\t" + \
             str(''.join(map(str, row[6]))) + "\t" +  str(''.join(map(str, row[7]))) + "\t" + str(''.join(map(str, row[8]))) + "\t" + str(row[9]) + "\t" + str(total)+ "\t" + str(freq) + '\n' #depth
             out1.write(rec)                
                     
          #strand=+ 3'SS start-side        
         elif "3" in str(row[7]) and "+" in str(row[8]):
-            for i in range(0,len(start_l)):
-                position = c + ":" + str(start_l[i])
+            for i in range(0,len(start_ls)):
+                position = c + ":" + str(start_ls[i])
                 v=s_dict.get(position, '0')
                 total = total + int(v) 
             freq = int(row[9])/total
-            rec = c + "\t" + str(''.join(map(str, s))) + "\t" + str(''.join(map(str, e))) + "\t"  + str(','.join(map(str, start_l))) + "\t" +  str(','.join(map(str, end_l)))  + "\t" + \
+            rec = c + "\t" + str(''.join(map(str, s))) + "\t" + str(''.join(map(str, e))) + "\t"  + str(','.join(map(str, start_ls))) + "\t" +  str(','.join(map(str, end_ls)))  + "\t" + \
             str(''.join(map(str, row[6]))) + "\t" +  str(''.join(map(str, row[7]))) + "\t" + str(''.join(map(str, row[8]))) + "\t" + str(row[9]) + "\t" + str(total)+ "\t" + str(freq) + '\n' #depth
             out1.write(rec)  
             
@@ -130,8 +130,6 @@ with open(file4, 'r') as in1:
                 #if int(F[8]) >= 3 and float(F[10]) >= 0.05:
                     out2.write(line)
                     
-end = time.time()
-print(start)
-print(end)
-#print(round(end-start,2))
+tend = time.time()
+print(round(tend-tstart,2))
           
