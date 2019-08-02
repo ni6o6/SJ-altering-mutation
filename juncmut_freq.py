@@ -33,12 +33,11 @@ args = parser.parse_args()
 
 pr = args.input
 print(pr) 
-pr= 'RERF-LC-OK'
-folder='lung'
-file3='./alterativeSJ_assadjfreq/%s/%s.SJ.fil.annot.assadj.txt' %(folder,pr)
-jfile= './junction/%s/%s.SJ.out.tab' %(folder,pr)
-file4 ='./alterativeSJ_assadjfreq/%s/%s.SJ.fil.annot.assadjunifreq.txt' %(folder,pr) 
-file44 ='./alterativeSJ_assadjfreq/%s/%s.SJ.fil.annot.assadjunifreqT.txt' %(folder,pr) 
+
+file3='./alterativeSJ_assadjfreq/%s/%s.SJ.fil.annot.assadj.txt' %(args.folder,pr)
+jfile= './junction/%s/%s.SJ.out.tab' %(args.folder,pr)
+file4 ='./alterativeSJ_assadjfreq/%s/%s.SJ.fil.annot.assadjunifreq.txt' %(args.folder,pr) 
+file44 ='./alterativeSJ_assadjfreq/%s/%s.SJ.fil.annot.assadjunifreqT.txt' %(args.folder,pr) 
 
   
 data = pd.read_csv(file3, sep='\t', header=None)
